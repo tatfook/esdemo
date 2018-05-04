@@ -3,7 +3,7 @@ const uuidv1 = require('uuid/v1');
 const splitChar = ".";
 
 export function getKeyByPath(path) {
-	const reg = /^__data__\/([^\/]+)\/(.+)\.yaml$/;
+	const reg = /^__data__\/([^\/]+)\/(.+)\.yml$/;
 	const paths = path.match(reg);
 
 	if (!paths) return;
@@ -34,8 +34,8 @@ export function Key(opt = {}) {
 		
 	self.getTable = () => table;
 
-	self.path = (id) => "__data__/" +  table.index() + "/" + (id || self.id) + ".yaml";
-	self.uid = (id) => self.path(id).replace(/\//g, "_").replace(/\.yaml/, "");
+	self.path = (id) => "__data__/" +  table.index() + "/" + (id || self.id) + ".yml";
+	self.uid = (id) => self.path(id).replace(/\//g, "_").replace(/\.yml/, "");
 }
 
 Key.prototype.parsePath = function(path) {
