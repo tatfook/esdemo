@@ -25,13 +25,14 @@ export function getKeyByPath(path) {
 
 export function Key(opt = {}) {
 	const self = this;
-	const table = new Table({prefix:self.prefix, version:self.version, tablename:self.tablename});
 	
 	self.prefix = opt.prefix || "kw";
 	self.version = opt.version || "v0";
 	self.tablename = opt.tablename || "tablename";
 	self.id = opt.id || "__id__";
 		
+	const table = new Table({prefix:self.prefix, version:self.version, tablename:self.tablename});
+
 	self.getTable = () => table;
 
 	self.path = (id) => "__data__/" +  table.index() + "/" + (id || self.id) + ".yml";
