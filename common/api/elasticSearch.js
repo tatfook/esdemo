@@ -1,23 +1,41 @@
+import axios from "axios";
 
-import elasticsearch from "elasticsearch";
+export function httpRequest(method, url, data, config) {
+	method = (method || "get").toLowerCase();
+	config = {...(config || {}), method:method, url:url};
+	if (method == "get" || method == "delete" || method == "head" || method == "options") {
+		config.params = data;
+	} else {
+		config.data = data;
+	}
 
-const defaultConfig = {
-	host: "http://10.28.18.7:9200",
+	return axios.request(config).then(res => res.data).catch((e => console.log(e)));
 }
 
-export const ElasticsearchFactory = function(config){
-	this.api = new elasticsearch.Client({
-		...defaultConfig,
-		...(config || {}),
-	});
+export const httpGet = (url, data, config) => httpRequest("get", url, data, config);
+export const httpPost = (url, data, config) => httpRequest("post", url, data, config);
+export const httpPut = (url, data, config) => httpRequest("put", url, data, config);
+export const httpDelete = (url, data, config) => httpRequest("delete", url, data, config);
+
+function initHttpOptions(self, options) {
+	options = options || {};
+	options.headers = options.headers || {};
+	
+	self.options = options;
+	self.httpGet = httpGet;
+	self.httpPost = httpPost;
+	self.httpPut = httpPut;
+	self.httpDelete = httpDelete;
 }
 
-ElasticsearchFactory.prototype.search = function(key, query) {
-	return this.api.search({
-		index: key.index(),
-		type: key.type(),
-		body: query,
-	}).then(data => ({total: data.hits.total, list: data.hits.hits.map(val => ({...val._source, id:val._id}))}));	
+
+export const Elasticsearch = function(options){
+	const self = this;
+	initHttpOptions(self, options);
+
+	const apiRequest = (method, url) => (data, config) => httpRequest(method || "get", url, data, Object.assign(self.options, config));
+
+	self.search = apiRequest("POST", "elasticsearch/search");
 }
 
-export default new ElasticsearchFactory();
+export default new Elasticsearch();

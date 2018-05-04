@@ -71,7 +71,7 @@ export default {
 		selectFile() {
 			const self = this;
 			const file = event.target.files[0];
-			self.keepwork.qiniu.upload(file, "test.jpg", {
+			self.keepwork.qiniu.upload(file, file.name, {
 				complete(res) {
 					const data = res.data;
 					if (!data || !data.downloadUrl) {

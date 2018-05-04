@@ -26,12 +26,12 @@ import {
 import {mapActions, mapGetters} from "vuex";
 
 import config from "@/config.js";
-import {ElasticsearchFactory} from "@@/common/api/elasticSearch.js";
+import {Elasticsearch} from "@@/common/api/elasticSearch.js";
 import common from "@@/common/api/common.js";
 import keepwork from "@/components/keepwork.js";
 
-const elasticsearch = new ElasticsearchFactory({
-	host: config.elasticsearch.baseURL,
+const elasticsearch = new Elasticsearch({
+	baseURL: config.ESService.baseURL,
 });
 
 export default {
@@ -73,8 +73,13 @@ export default {
 
 	async mounted() {
 		await this.loadData();
-		const demo = await elasticsearch.search(this.table);
-		this.datas = demo.list;
+		const table = this.table;
+		const data = await elasticsearch.search({
+			index: table.index(),
+			type: table.type(),
+			//body: "", -- es 查询体
+		}).then(data => ({total: data.hits.total, list: data.hits.hits.map(val => ({...val._source, id:val._id}))}));
+		this.datas = data.list; // es 结果
 		console.log(this.datas);
 	},
 }

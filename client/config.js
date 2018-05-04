@@ -12,6 +12,7 @@ const productionConfig = {
 const developmentConfig = {
 	ESService: {
 		baseURL: "http://es.keepwork.com/api/v0/",
+		//baseURL: "http://47.52.20.34:8088/api/v0/",
 	},
 
 	QiniuService: {

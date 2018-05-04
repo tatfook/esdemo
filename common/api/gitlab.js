@@ -18,27 +18,6 @@ const defaultConfig = {
 	//rootPath:"xiaoyao",
 };
 
-const xiaoyaoConfig = {
-	username:"xiaoyao",
-	projectId: 4980659,
-	externalUsername: "wxaxiaoyao",
-	projectName: "keepworkdatasource",
-	token:"Ed9S7hSfiruewMR-jitR",
-	ref: "master",
-	branch: "master",
-}
-
-const keepworkConfig = {
-	username:"keepwork",
-	externalUsername: "keepwork",
-	projectName: "keepworkdatasource",
-	host:"https://gitlab.com",
-	token:"9x94xLa-CZPH9Da5h5kd",
-	ref:"master",
-	branch: "master",
-	projectId:5112836,
-}
-
 const gitlab = {
 	gits:{
 
@@ -204,9 +183,6 @@ gitlab.getTree = function(path, options) {
 gitlab.getFileGitUrl = function(path) {
 	return this.getGitByPath(path).getFileGitUrl(path);
 }
-
-gitlab.initConfig(keepworkConfig);
-gitlab.initConfig(xiaoyaoConfig);
 
 export const gitlabFactory = (config) => new Gitlab(config);
 
